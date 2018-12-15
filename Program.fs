@@ -77,7 +77,7 @@ let checkArray (a:string[,]) (ID:string) left top wide tall =
 [<EntryPoint>]
 let main argv =
   let stopWatch = System.Diagnostics.Stopwatch.StartNew()
-  let lines = readLines "/Users/cn/Desktop/input6.txt"
+  let lines = readLines "/Users/cn/Desktop/input5.txt"
   let mutable list = List.empty
 
   for s in lines do

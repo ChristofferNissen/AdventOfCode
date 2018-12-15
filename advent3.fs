@@ -39,46 +39,10 @@ let compareStrings (s1:string) (s2:string) =
 let compareStrings2 (s1:string) (s2:string) = 
   (compare2 (String.Empty) (Seq.toList s1) (Seq.toList s2))
 
-let fillArray (a:string[,]) ID left top wide tall = 
-  // start at left, top and work down to left+wide and top + tall
-  for i = left to (left+wide-1) do
-    for y = top to (top+tall-1) do
-      let tmp = (a.[i,y])
-      //printfn "%s" tmp
-      if (tmp.Contains "#")
-      then
-        a.[i,y] <- (a.[i,y]).Replace(tmp, "X")
-        //printfn "%s" x
-      elif (tmp.Contains "X")
-      then 
-        a.[i,y] <- a.[i,y] 
-        //printfn "%s" "X" 
-      else 
-        a.[i,y] <- (a.[i,y]).Replace(tmp,ID)
-        //printfn "%s" x
-
-let checkArray (a:string[,]) (ID:string) left top wide tall = 
-  let mutable result = true
-  // start at left, top and work down to left+wide and top + tall
-  for i = left to (left+wide-1) do
-    for y = top to (top+tall-1) do
-      let tmp = (a.[i,y])
-      //printfn "%s" tmp
-      let x = tmp.Contains ID
-      if (x)
-      then
-        if result 
-        then result <- true
-      else 
-        result <- false
-  result
-         
 [<EntryPoint>]
 let main argv =
   let stopWatch = System.Diagnostics.Stopwatch.StartNew()
   let lines = readLines "/Users/cn/Desktop/input4.txt"
-
-  let mutable grid = Array2D.init<string> 2000 2000 (fun row col -> sprintf "%d" 0)
 
   // loop over all lines paiting squares in array
     // extract info 
@@ -91,53 +55,16 @@ let main argv =
     let tmp = position.Split ','
     let dimensions = (data.[1])
     let tmp2 = dimensions.Split 'x'
-    let (left, top) = ((tmp.[0]).Trim ' ',tmp.[1])
-    let (wide, tall) = ((tmp2.[0]).Trim ' ', tmp2.[1])
-    
+    let (left, top) = (tmp.[0],tmp.[1])
+    let (x,y) = (tmp2.[0], tmp2.[1])
+
     //let (left, top ) = position.Split ','
     //let (x,y) = dimensions.Split 'x'
 
-    //let x = grid.[int left,int top]
-    
-    // fill in array 
-    //printfn "Left: %s Top: %s Wide: %s Tall: %s" left top wide tall
-    fillArray grid ((x.[0]).Trim ' ') (int left) (int top) (int wide) (int tall) 
-  (*
-  // loop over array, count X
-  let result = 
-    let mutable count = 0
-    for i = 0 to 1999 do
-      for y = 0 to 1999 do
-        if grid.[i,y] = "X"
-        then count <- (count+1)
-        
-    count
-
-  printfn "Number of overlapping squares: %d" result
-  *)
-  // Check integrity of squares
-  for s in lines do
-    // extract info
-    let x = s.Split '@'
-    let data = (x.[1]).Split ':'
-    let position = (data.[0])
-    let tmp = position.Split ','
-    let dimensions = (data.[1])
-    let tmp2 = dimensions.Split 'x'
-    let (left, top) = ((tmp.[0]).Trim ' ',tmp.[1])
-    let (wide, tall) = ((tmp2.[0]).Trim ' ', tmp2.[1])
-
-    let result = checkArray grid ((x.[0]).Trim ' ') (int left) (int top) (int wide) (int tall) 
-    if result then printfn "Result: %b Id: %s" result ((x.[0]).Trim ' ') 
+    printfn "Left: %s Top: %s x: %s y: %s" left top x y
 
 
 
-(*
-  let initiateBoard = 
-    for r = 0 to Array2D.length1 grid - 1 do
-      for c = 0 to Array2D.length2 grid - 1 do
-        printfn "%A " grid.[r, c]
-*)
 (*
   for i = 1 to (lines.Count-1) do
     for y = (1+i) to (lines.Count-1) do 
