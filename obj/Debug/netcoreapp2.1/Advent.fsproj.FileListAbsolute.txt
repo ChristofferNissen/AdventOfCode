@@ -1,0 +1,10 @@
+/Users/cn/Desktop/Advent/bin/Debug/netcoreapp2.1/Advent.deps.json
+/Users/cn/Desktop/Advent/bin/Debug/netcoreapp2.1/Advent.runtimeconfig.json
+/Users/cn/Desktop/Advent/bin/Debug/netcoreapp2.1/Advent.runtimeconfig.dev.json
+/Users/cn/Desktop/Advent/bin/Debug/netcoreapp2.1/Advent.dll
+/Users/cn/Desktop/Advent/bin/Debug/netcoreapp2.1/Advent.pdb
+/Users/cn/Desktop/Advent/obj/Debug/netcoreapp2.1/Advent.fsprojAssemblyReference.cache
+/Users/cn/Desktop/Advent/obj/Debug/netcoreapp2.1/Advent.AssemblyInfoInputs.cache
+/Users/cn/Desktop/Advent/obj/Debug/netcoreapp2.1/Advent.AssemblyInfo.fs
+/Users/cn/Desktop/Advent/obj/Debug/netcoreapp2.1/Advent.dll
+/Users/cn/Desktop/Advent/obj/Debug/netcoreapp2.1/Advent.pdb
