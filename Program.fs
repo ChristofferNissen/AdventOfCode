@@ -3,7 +3,6 @@ open System.Collections
 open System.Collections.Generic
 open System.Collections.Generic
 open System.Linq
-open System.Collections.Generic
 
 let readLines filePath = 
   System.IO.File.ReadLines(filePath).ToList()
@@ -40,174 +39,40 @@ let compareStrings (s1:string) (s2:string) =
 let compareStrings2 (s1:string) (s2:string) = 
   (compare2 (String.Empty) (Seq.toList s1) (Seq.toList s2))
 
-let fillArray (a:string[,]) ID left top wide tall = 
-  // start at left, top and work down to left+wide and top + tall
-  for i = left to (left+wide-1) do
-    for y = top to (top+tall-1) do
-      let tmp = (a.[i,y])
-      //printfn "%s" tmp
-      if (tmp.Contains "#")
-      then
-        a.[i,y] <- (a.[i,y]).Replace(tmp, "X")
-        //printfn "%s" x
-      elif (tmp.Contains "X")
-      then 
-        a.[i,y] <- a.[i,y] 
-        //printfn "%s" "X" 
-      else 
-        a.[i,y] <- (a.[i,y]).Replace(tmp,ID)
-        //printfn "%s" x
-
-let checkArray (a:string[,]) (ID:string) left top wide tall = 
-  let mutable result = true
-  // start at left, top and work down to left+wide and top + tall
-  for i = left to (left+wide-1) do
-    for y = top to (top+tall-1) do
-      let tmp = (a.[i,y])
-      //printfn "%s" tmp
-      let x = tmp.Contains ID
-      if (x)
-      then
-        if result 
-        then result <- true
-      else 
-        result <- false
-  result
-         
 [<EntryPoint>]
 let main argv =
   let stopWatch = System.Diagnostics.Stopwatch.StartNew()
-  let lines = readLines "/Users/cn/Desktop/input5.txt"
-  let mutable list = List.empty
+  let lines = readLines "/Users/cn/Desktop/input3.txt"
 
-  for s in lines do
-    // extract info
-    let x = s.Split ']'
-    let date = x.[0].Substring 1
-    //printfn "%s" (date.ToString())
-    //let d = DateTime.ParseExact(date, "yyyy-MM-dd hh:mm", null)
-    let d = DateTime.Parse(date)
-    //printfn "%s" (d.ToString())
-    //printfn "%s" (d.ToString "yyyy/MM/dd mm:ss")
-    let c = x.[1].Trim ' '
-
-    list <- List.append list [(d,c)]
-
-  // sort list
-  list <- List.sortBy (fun (date, command) -> date ) list
-  //for (d,c) in list do printfn "%s %s" (d.ToString "yyyy/MM/dd hh:mm:ss") c
-
-  // count minuts asleep
-
-  //for i = 0 to (list.Length-1) do
-  let mutable map = Map.empty
-  let mutable currentGuard = 0
-  let mutable sleepStart = DateTime.Now
-  for (d,c) in list do 
-    match c with
-    | "falls asleep" -> 
-      sleepStart <- d
-      //printfn "Asleep %s Guard: %d" (d.ToString()) currentGuard
-    | "wakes up" -> 
-      //printfn "%d %s" currentGuard (sleepStart.ToString())
-      let diff = d - sleepStart
-      //printfn "Guard %d wakes after %f" currentGuard diff.TotalSeconds
-      if (Map.containsKey currentGuard map)
-      then
-        let (x,y) = Map.find currentGuard map
-        let m = x @ [(sleepStart.Minute, diff.TotalMinutes)]
-        //let m = ma.Append (int) sleepStart.Minute 
-        map <- Map.add (currentGuard) (m, (diff.TotalSeconds + y)) map
-      else 
-        let i = [(sleepStart.Minute, diff.TotalMinutes)]
-        map <- Map.add (currentGuard) (i, diff.TotalSeconds) map
-
-    | _ ->
-      //printfn "%s" c 
-      let x = c.Split 'b'
-      let guard = x.[0].Trim ' '
-      let guardNr = (guard.Split '#').[1].Trim ' ' 
-      //printfn "%d" (int guardNr)
-      currentGuard <- int guardNr
-      // falls asleep
-      //printfn "%d" time.Seconds
-      // insert time between falls aleep and wakes up
-      //printfn "%s" guardNr
-
-  let mutable maxSleep = (0,0)    
-  let mutable newMap = Map.empty
-  for entry in map do 
-    let x = entry.Value
-    let (y,z) = x
-    let (guard, sleep) = maxSleep
-    //printfn "Evaluating %d %f CURRENT MAX: %d %f" entry.Key z guard sleep
-    if( (int z) > sleep) 
-    then 
-      //printfn "new Max Sleep %d %f" entry.Key z
-      maxSleep <- (entry.Key, (int z))
-    for (tmp, tmp2) in y do
-      //printfn "%d %d" tmp (int tmp2)
-      // count in map
-      for i in tmp .. (tmp + (int tmp2))-1 do
-        //printfn "%d %d %f %d" i tmp tmp2 (tmp + (int tmp2))
-        if (newMap.ContainsKey (entry.Key, i))
-        then
-          let tp = newMap.Item ( entry.Key, i)
-          newMap <- newMap.Add ((entry.Key, i), (tp+1))
-        else
-          newMap <- newMap.Add ((entry.Key, i), 1)
-
-  let (xx,y) = maxSleep    
-  printf "%d %d\n" xx y
-
-  //for entry in newMap do 
-    //let (x,y) = entry.Key
-    //if( x = 2389) then
-    // printfn "x: %d y: %d z: %d" x y entry.Value
-
-    // extract info from map
-  let mutable max = ((0,0),0)
-  let mutable max2 = ((0,0),0)
-  for entry in newMap do
-    let (x,y) = entry.Key
-    //printfn "%d %d %d" x y entry.Value
-    let (k1,v1) = max2
-      
-    if(entry.Value > v1) 
-    then 
-      //printfn "Setting new max %d %d %d" x y entry.Value 
-      max2 <- ((x,y), entry.Value)
-
-    if xx = x then
-      let (k,v) = max
-      
-      if(entry.Value > v) 
+  for i = 1 to (lines.Count-1) do
+    for y = (1+i) to (lines.Count-1) do 
+      let x = compareStrings (lines.Item i) (lines.Item y)
+      if x = 1 
       then 
-        //printfn "Setting new max %d %d %d" x y entry.Value 
-        max <- ((x,y), entry.Value)
-        
-  let ((x,z),y) = max
-  printfn "Guard that sleeps the most: Gurad: %d, Minut: %d Times: %d" x z y
-  printfn "Result: (%d*%d) = %d" x z (x*z) 
-  let ((x1,z1),y1) = max2
-  printfn "Guard that sleeps the most at a specifc minut: Guard: %d, Minut: %d Times: %d" x1 z1 y1
-  printfn "Result: (%d*%d) = %d" x1 z1 (x1*z1) 
-      //printfn "K: %d V: %d F: %f " entry.Key tmp z
+        // Match found where only one differ. 
+        printfn "Found match: %s %s" (lines.Item i) (lines.Item y)
+        printfn "%s" (compareStrings2 (lines.Item i) (lines.Item y))
 
-(*
-    let data = (x.[1]).Split ':'
-    ls
+  // compare current line to all others, if no difference of one 1 is found, go on to next line
 
-    let position = (data.[0])
-    let tmp = position.Split ','
-    let dimensions = (data.[1])
-    let tmp2 = dimensions.Split 'x'
-    let (left, top) = ((tmp.[0]).Trim ' ',tmp.[1])
-    let (wide, tall) = ((tmp2.[0]).Trim ' ', tmp2.[1])
- *)  
+  let mutable numberOfTwos = 0
+  let mutable numberOfThrees = 0
+  for s in lines do 
+    let map = getMap s
+    //for entry in map do  printfn "%c %d" entry.Key entry.Value
 
-
+    // single loop count both 2's and 3's 
+    let (tmp2, tmp3) =  Map.fold (fun ((state:int),(state1:int)) (key:char) (value:int) -> 
+      let (tmpState,tmpState1) = if (value = 2) then ((state+1), state1) else (state,state1) 
+      if (value = 3) then ((tmpState), tmpState1+1) else (tmpState, tmpState1) ) (0,0) map
+    
+    numberOfTwos <- if tmp2 > 0 then numberOfTwos + 1 else numberOfTwos
+    numberOfThrees <- if tmp3 > 0 then numberOfThrees + 1 else numberOfThrees
+   
+  //printfn "%d" numberOfTwos
+  //printfn "%d" numberOfThrees
   stopWatch.Stop()
-
+  //printfn "time: %f ms" stopWatch.Elapsed.TotalMilliseconds
+  printfn "checksum: %d" (numberOfTwos * numberOfThrees)
   
   0
