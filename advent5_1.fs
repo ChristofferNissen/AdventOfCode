@@ -5,14 +5,6 @@ open System.Linq
 open System.Text
 let readLines filePath = System.IO.File.ReadLines(filePath).ToList()
 
-let rec run (s: string list) acc : string list = 
-  printfn "%d" s.Length
-  match s with
-    | s :: c :: xs when ((s = c.ToUpper()) || (s.ToUpper() = c)) -> run xs acc
-    | s :: c :: xs -> run xs ([s;c;]@acc)
-    | [s] -> run [] ([s]@acc)
-    | [] -> acc
-
 [<EntryPoint>]
 let main argv =
   let lines = readLines "/Users/cn/Desktop/input6.txt"
@@ -33,7 +25,7 @@ let main argv =
 
             if (( (Char.ToLower s) = (Char.ToLower c)) && r)
             then
-              printfn "FOUND MATCH %c %c" s c
+              //printfn "FOUND MATCH %c %c" s c
               react acc xs 
             else
               react ([s]@acc) ([c]@xs)
